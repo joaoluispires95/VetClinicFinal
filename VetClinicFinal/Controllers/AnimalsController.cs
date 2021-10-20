@@ -12,7 +12,6 @@ using VetClinicFinal.Helpers;
 
 namespace VetClinic.Controllers
 {
-    
 
     public class AnimalsController : Controller
     {

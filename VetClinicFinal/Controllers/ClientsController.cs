@@ -83,12 +83,17 @@ namespace VetClinic.Controllers
 
                     await _userHelper.AddUserToRoleAsync(user, "Client");
 
-                    Response response = _mailHelper.SendEmail(user.Email, "Your VetClinic Account",
+                    var myToken = await _userHelper.GeneratePasswordResetTokenAsync(user);
+
+                    var link = this.Url.Action("ResetPassword", "Account", new { token = myToken }, protocol: HttpContext.Request.Scheme);
+
+                    _mailHelper.SendEmail(user.Email, "Your VetClinic Account",
                     $"Welcome {user.FirstName},<br/> " +
                     $"Your account has been created. Your credentials are:<br/>" +
                     $"Username: {user.Email}<br/>" +
-                    $"Password: 123456789 <br/><br/>" +
-                    $"Thank you." + "<br/><br/> VetClinic");
+                    $"Password: Change password click in this link:<br/>" +
+                    $"<a href = \"{link}\">Reset Password</a><br/><br/>" +
+                    $"Thank you for your preference." + "<br/><br/> VetClinic");
                 }
 
                 return RedirectToAction(nameof(Index));
